@@ -139,34 +139,125 @@
     <!-- Tab Content -->
     <div class="tab-content" id="bead-generator">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Image Upload Section -->
+        <!-- Image Upload and Drawing Section -->
         <div class="pixel-panel rounded-none">
           <div class="bg-secondary p-4 border-b-4 border-pixel-border">
             <h3 class="text-lg font-bold text-pixel-bg flex items-center">
-              <i class="fa fa-upload mr-3"></i>上传图片
+              <i class="fa fa-upload mr-3"></i>上传图片 / 画图
             </h3>
           </div>
           <div class="p-6">
-            <div class="mb-6">
-              <div class="border-4 border-dashed border-pixel-border bg-pixel-bg p-8 text-center pixel-border">
-                <input type="file" id="image-upload" accept="image/*" class="hidden">
-                <label for="image-upload" class="cursor-pointer">
-                  <div class="w-24 h-24 mx-auto mb-4 bg-accent border-4 border-pixel-border flex items-center justify-center">
-                    <i class="fa fa-cloud-upload text-pixel-border text-3xl"></i>
+            <!-- Upload or Draw Tabs -->
+            <div class="mb-6 flex space-x-4">
+              <button id="upload-tab" class="flex-1 py-3 bg-primary text-pixel-bg border-4 border-pixel-border pixel-button text-sm">
+                <i class="fa fa-cloud-upload mr-2"></i>上传图片
+              </button>
+              <button id="draw-tab" class="flex-1 py-3 bg-pixel-panel text-pixel-border border-4 border-pixel-border pixel-button text-sm">
+                <i class="fa fa-pencil mr-2"></i>画图
+              </button>
+            </div>
+            
+            <!-- Upload Section -->
+            <div id="upload-section">
+              <div class="mb-6">
+                <div class="border-4 border-dashed border-pixel-border bg-pixel-bg p-8 text-center pixel-border">
+                  <input type="file" id="image-upload" accept="image/*" class="hidden">
+                  <label for="image-upload" class="cursor-pointer">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-accent border-4 border-pixel-border flex items-center justify-center">
+                      <i class="fa fa-cloud-upload text-pixel-border text-3xl"></i>
+                    </div>
+                    <p class="text-pixel-border mb-2 text-sm">点击或拖拽上传图片</p>
+                    <p class="text-pixel-border text-xs">支持 JPG、PNG、GIF 格式</p>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="mb-6">
+                <label class="block text-sm font-medium text-pixel-border mb-4">图片预览</label>
+                <div id="image-preview" class="border-4 border-pixel-border bg-pixel-bg min-h-[200px] flex items-center justify-center pixel-border">
+                  <p class="text-pixel-border text-sm">上传图片后将显示预览</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Drawing Section -->
+            <div id="draw-section" class="hidden">
+              <!-- Canvas Size -->
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-pixel-border mb-2">画布大小</label>
+                <div class="flex items-center space-x-4">
+                  <input type="range" id="draw-canvas-size" min="5" max="30" value="15" class="flex-1 h-6 bg-pixel-bg border-4 border-pixel-border pixel-input cursor-pointer">
+                  <div class="w-24 text-center bg-pixel-bg border-4 border-pixel-border pixel-border">
+                    <span id="draw-canvas-size-value" class="text-sm">15x15</span>
                   </div>
-                  <p class="text-pixel-border mb-2 text-sm">点击或拖拽上传图片</p>
-                  <p class="text-pixel-border text-xs">支持 JPG、PNG、GIF 格式</p>
-                </label>
+                </div>
+                <div class="flex justify-between text-xs text-pixel-border mt-1">
+                  <span>5x5</span>
+                  <span>30x30</span>
+                </div>
+              </div>
+              
+              <!-- Drawing Tools -->
+              <div class="mb-4 flex flex-wrap gap-2">
+                <button id="draw-brush" class="px-4 py-2 bg-primary text-pixel-bg border-4 border-pixel-border pixel-button text-sm">
+                  <i class="fa fa-pencil mr-2"></i>画笔
+                </button>
+                <button id="draw-eraser" class="px-4 py-2 bg-pixel-panel text-pixel-border border-4 border-pixel-border pixel-button text-sm">
+                  <i class="fa fa-eraser mr-2"></i>橡皮擦
+                </button>
+                <button id="draw-undo" class="px-4 py-2 bg-pixel-panel text-pixel-border border-4 border-pixel-border pixel-button text-sm">
+                  <i class="fa fa-undo mr-2"></i>撤销
+                </button>
+                <button id="draw-clear" class="px-4 py-2 bg-pixel-panel text-pixel-border border-4 border-pixel-border pixel-button text-sm">
+                  <i class="fa fa-trash mr-2"></i>清空
+                </button>
+              </div>
+              
+              <!-- Brush Size -->
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-pixel-border mb-2">画笔大小</label>
+                <div class="flex items-center space-x-4">
+                  <input type="range" id="brush-size" min="1" max="3" value="1" class="flex-1 h-6 bg-pixel-bg border-4 border-pixel-border pixel-input cursor-pointer">
+                  <div class="w-24 text-center bg-pixel-bg border-4 border-pixel-border pixel-border">
+                    <span id="brush-size-value" class="text-sm">1x1</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Color Palette -->
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-pixel-border mb-2">颜色选择</label>
+                <!-- Color Search and Add -->
+                <div class="flex space-x-2 mb-3">
+                  <div class="flex space-x-2">
+                    <input type="color" id="color-picker" class="w-12 h-12 border-4 border-pixel-border pixel-input cursor-pointer">
+                    <button id="add-color" class="px-4 py-2 bg-primary text-pixel-bg border-4 border-pixel-border pixel-button text-sm">
+                      <i class="fa fa-plus mr-1"></i>添加
+                    </button>
+                  </div>
+                  <input type="text" id="color-search" placeholder="搜索颜色..." class="w-40 bg-pixel-bg border-4 border-pixel-border pixel-input px-3 py-2 text-sm">
+                </div>
+                <!-- Search Results -->
+                <div id="color-search-results" class="mb-3 hidden">
+                  <div class="text-sm font-medium text-pixel-border mb-2">搜索结果</div>
+                  <div id="search-results-container" class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto pixel-scrollbar">
+                    <!-- Search results will be generated by JavaScript -->
+                  </div>
+                </div>
+                <div id="color-palette" class="grid grid-cols-8 gap-1">
+                  <!-- Colors will be generated by JavaScript -->
+                </div>
+              </div>
+              
+              <!-- Drawing Canvas -->
+              <div class="mb-4">
+                <div id="drawing-canvas-container" class="border-4 border-pixel-border bg-pixel-bg pixel-border">
+                  <!-- Canvas will be generated by JavaScript -->
+                </div>
               </div>
             </div>
             
-            <div class="mb-6">
-              <label class="block text-sm font-medium text-pixel-border mb-4">图片预览</label>
-              <div id="image-preview" class="border-4 border-pixel-border bg-pixel-bg min-h-[200px] flex items-center justify-center pixel-border">
-                <p class="text-pixel-border text-sm">上传图片后将显示预览</p>
-              </div>
-            </div>
-            
+            <!-- Grid Size (common for both upload and draw) -->
             <div class="mb-6">
               <label class="block text-sm font-medium text-pixel-border mb-4">网格大小</label>
               <div class="flex items-center space-x-4">
@@ -204,6 +295,9 @@
                   </button>
                   <button id="preview-zoom-out" class="p-2 bg-pixel-panel border-4 border-pixel-border pixel-button">
                     <i class="fa fa-search-minus text-pixel-border"></i>
+                  </button>
+                  <button id="clear-preview" class="p-2 bg-accent text-pixel-border border-4 border-pixel-border pixel-button">
+                    <i class="fa fa-trash text-pixel-border"></i>
                   </button>
                 </div>
               </div>
@@ -243,7 +337,7 @@
           <!-- 上传图纸区域 -->
           <div class="mb-6">
             <div class="bg-secondary p-4 border-4 border-pixel-border mb-4">
-              <h4 class="text-lg font-medium text-pixel-bg">上传图纸识别色号</h4>
+              <h4 class="text-lg font-medium text-pixel-bg">上传图纸识别色号 <span class="text-xs font-normal">（此识别功能不太智能，请谨慎使用）</span></h4>
             </div>
             <div class="border-4 border-dashed border-pixel-border bg-pixel-bg p-8 text-center pixel-border mb-4">
               <input type="file" id="inventory-image-upload" accept="image/*" class="hidden">
@@ -695,6 +789,44 @@
     let usedBeads = {};
     let analyzedBeads = {};
     let myBeads = [];
+    
+    // 画图相关变量
+    let drawingCanvas = null;
+    let drawingContext = null;
+    let canvasSize = 15;
+    let brushSize = 1;
+    let currentTool = 'brush';
+    let currentColor = '#000000';
+    let isDrawing = false;
+    let history = [];
+    
+    // 基础24色
+    const basicColors = [
+      '#000000', // 黑色
+      '#FFFFFF', // 白色
+      '#FF0000', // 红色
+      '#00FF00', // 绿色
+      '#0000FF', // 蓝色
+      '#FFFF00', // 黄色
+      '#FF00FF', // 洋红色
+      '#00FFFF', // 青色
+      '#FFA500', // 橙色
+      '#800080', // 紫色
+      '#A52A2A', // 棕色
+      '#808080', // 灰色
+      '#008000', // 深绿色
+      '#000080', // 深蓝色
+      '#800000', // 深红色
+      '#808000', // 橄榄色
+      '#FFC0CB', // 粉色
+      '#A9A9A9', // 暗灰色
+      '#FFD700', // 金色
+      '#DDA0DD', //  plum
+      '#87CEEB', //  sky blue
+      '#98FB98', //  pale green
+      '#FFB6C1', //  light pink
+      '#E6E6FA'  //  lavender
+    ];
 
     // DOM 元素
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -718,6 +850,27 @@
     const notificationIcon = document.getElementById('notification-icon');
     const notificationText = document.getElementById('notification-text');
     
+    // 画图相关DOM元素
+    const uploadTab = document.getElementById('upload-tab');
+    const drawTab = document.getElementById('draw-tab');
+    const uploadSection = document.getElementById('upload-section');
+    const drawSection = document.getElementById('draw-section');
+    const drawCanvasSize = document.getElementById('draw-canvas-size');
+    const drawCanvasSizeValue = document.getElementById('draw-canvas-size-value');
+    const drawBrush = document.getElementById('draw-brush');
+    const drawEraser = document.getElementById('draw-eraser');
+    const drawUndo = document.getElementById('draw-undo');
+    const drawClear = document.getElementById('draw-clear');
+    const brushSizeInput = document.getElementById('brush-size');
+    const brushSizeValue = document.getElementById('brush-size-value');
+    const colorPalette = document.getElementById('color-palette');
+    const drawingCanvasContainer = document.getElementById('drawing-canvas-container');
+    const colorSearch = document.getElementById('color-search');
+    const colorPicker = document.getElementById('color-picker');
+    const addColorBtn = document.getElementById('add-color');
+    const colorSearchResults = document.getElementById('color-search-results');
+    const searchResultsContainer = document.getElementById('search-results-container');
+    
     // 库存管理页面元素
     const inventoryImageUpload = document.getElementById('inventory-image-upload');
     const inventoryImagePreview = document.getElementById('inventory-image-preview');
@@ -738,8 +891,337 @@
       initializeMyBeads();
       renderInventory();
       renderMyBeads();
+      initializeDrawing();
       setupEventListeners();
     });
+    
+    // 初始化画图功能
+    function initializeDrawing() {
+      // 初始化颜色选择器
+      initializeColorPalette();
+      // 创建画布
+      createDrawingCanvas();
+    }
+    
+    // 初始化颜色选择器
+    function initializeColorPalette() {
+      renderColorPalette();
+      setupColorEventListeners();
+    }
+    
+    // 渲染颜色选择器
+    function renderColorPalette() {
+      colorPalette.innerHTML = '';
+      basicColors.forEach((color, index) => {
+        const colorItem = document.createElement('div');
+        colorItem.className = 'w-6 h-6 border-2 border-pixel-border cursor-pointer relative';
+        colorItem.style.backgroundColor = color;
+        if (color === currentColor) {
+          colorItem.classList.add('ring-2', 'ring-accent');
+        }
+        
+        // 添加颜色点击事件
+        colorItem.addEventListener('click', function() {
+          // 移除之前选中的颜色
+          document.querySelectorAll('#color-palette > div').forEach(item => {
+            item.classList.remove('ring-2', 'ring-accent');
+          });
+          // 添加选中状态
+          this.classList.add('ring-2', 'ring-accent');
+          currentColor = color;
+        });
+        
+        // 添加删除按钮（仅对非默认颜色）
+        if (index >= 24) { // 前24个是默认颜色，不可删除
+          const deleteBtn = document.createElement('div');
+          deleteBtn.className = 'absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-xs font-bold cursor-pointer';
+          deleteBtn.textContent = '×';
+          deleteBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // 阻止冒泡，避免触发颜色选择
+            basicColors.splice(index, 1);
+            renderColorPalette();
+          });
+          colorItem.appendChild(deleteBtn);
+        }
+        
+        colorPalette.appendChild(colorItem);
+      });
+    }
+    
+    // 设置颜色相关事件监听器
+    function setupColorEventListeners() {
+      // 颜色搜索
+      colorSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        if (searchTerm.length > 0) {
+          // 从beadColors中搜索颜色，只搜索颜色代码和颜色名称
+          const results = beadColors.filter(bead => {
+            return bead.code.toLowerCase().includes(searchTerm) || 
+                   bead.name.toLowerCase().includes(searchTerm);
+          });
+          
+          // 显示搜索结果
+          colorSearchResults.classList.remove('hidden');
+          searchResultsContainer.innerHTML = '';
+          
+          results.forEach(bead => {
+            const colorItem = document.createElement('div');
+            colorItem.className = 'w-6 h-6 border-2 border-pixel-border cursor-pointer relative';
+            colorItem.style.backgroundColor = bead.color;
+            
+            // 添加颜色点击事件
+            colorItem.addEventListener('click', function() {
+              if (!basicColors.includes(bead.color)) {
+                basicColors.push(bead.color);
+                renderColorPalette();
+                showNotification(`已添加颜色 ${bead.code}`, 'check-circle', 'green-500');
+              }
+            });
+            
+            // 添加颜色代码
+            const codeLabel = document.createElement('div');
+            codeLabel.className = 'absolute bottom-[-10px] left-0 right-0 text-center text-xs text-pixel-border';
+            codeLabel.textContent = bead.code;
+            colorItem.appendChild(codeLabel);
+            
+            searchResultsContainer.appendChild(colorItem);
+          });
+        } else {
+          // 隐藏搜索结果
+          colorSearchResults.classList.add('hidden');
+        }
+      });
+      
+      // 添加颜色
+      addColorBtn.addEventListener('click', function() {
+        const newColor = colorPicker.value;
+        if (!basicColors.includes(newColor)) {
+          basicColors.push(newColor);
+          renderColorPalette();
+          showNotification('已添加自定义颜色', 'check-circle', 'green-500');
+        }
+      });
+    }
+    
+    // 创建画图画布
+    function createDrawingCanvas() {
+      // 清除之前的画布
+      drawingCanvasContainer.innerHTML = '';
+      
+      // 设置容器样式为居中对齐
+      drawingCanvasContainer.style.display = 'flex';
+      drawingCanvasContainer.style.justifyContent = 'center';
+      drawingCanvasContainer.style.alignItems = 'center';
+      drawingCanvasContainer.style.minHeight = '300px';
+      
+      // 创建新画布
+      drawingCanvas = document.createElement('canvas');
+      const cellSize = 20; // 每个单元格的大小
+      drawingCanvas.width = canvasSize * cellSize;
+      drawingCanvas.height = canvasSize * cellSize;
+      drawingCanvas.style.border = '1px solid #ccc';
+      drawingCanvas.style.imageRendering = 'pixelated';
+      
+      drawingCanvasContainer.appendChild(drawingCanvas);
+      drawingContext = drawingCanvas.getContext('2d');
+      
+      // 绘制网格
+      drawGrid();
+      
+      // 保存初始状态到历史记录
+      saveHistory();
+      
+      // 添加鼠标事件监听器
+      drawingCanvas.addEventListener('mousedown', startDrawing);
+      drawingCanvas.addEventListener('mousemove', draw);
+      drawingCanvas.addEventListener('mouseup', stopDrawing);
+      drawingCanvas.addEventListener('mouseout', stopDrawing);
+      
+      // 添加触摸事件监听器（移动设备）
+      drawingCanvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const rect = drawingCanvas.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const y = e.touches[0].clientY - rect.top;
+        startDrawing({ clientX: x + rect.left, clientY: y + rect.top });
+      });
+      
+      drawingCanvas.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        const rect = drawingCanvas.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const y = e.touches[0].clientY - rect.top;
+        draw({ clientX: x + rect.left, clientY: y + rect.top });
+      });
+      
+      drawingCanvas.addEventListener('touchend', stopDrawing);
+    }
+    
+    // 绘制网格
+    function drawGrid() {
+      const cellSize = 20;
+      drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+      
+      // 绘制背景
+      drawingContext.fillStyle = '#ffffff';
+      drawingContext.fillRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+      
+      // 绘制网格线
+      drawingContext.strokeStyle = '#e0e0e0';
+      drawingContext.lineWidth = 1;
+      
+      for (let i = 0; i <= canvasSize; i++) {
+        // 垂直线
+        drawingContext.beginPath();
+        drawingContext.moveTo(i * cellSize, 0);
+        drawingContext.lineTo(i * cellSize, canvasSize * cellSize);
+        drawingContext.stroke();
+        
+        // 水平线
+        drawingContext.beginPath();
+        drawingContext.moveTo(0, i * cellSize);
+        drawingContext.lineTo(canvasSize * cellSize, i * cellSize);
+        drawingContext.stroke();
+      }
+    }
+    
+    // 开始画图
+    function startDrawing(e) {
+      isDrawing = true;
+      // 开始绘画时保存状态
+      saveHistory();
+      draw(e);
+    }
+    
+    // 画图
+    function draw(e) {
+      if (!isDrawing) return;
+      
+      const rect = drawingCanvas.getBoundingClientRect();
+      const x = Math.floor((e.clientX - rect.left) / 20);
+      const y = Math.floor((e.clientY - rect.top) / 20);
+      
+      if (x >= 0 && x < canvasSize && y >= 0 && y < canvasSize) {
+        const cellSize = 20;
+        
+        // 绘制
+        drawingContext.fillStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+        
+        // 处理画笔大小
+        for (let i = 0; i < brushSize; i++) {
+          for (let j = 0; j < brushSize; j++) {
+            const nx = x + i;
+            const ny = y + j;
+            if (nx < canvasSize && ny < canvasSize) {
+              drawingContext.fillRect(nx * cellSize, ny * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      }
+    }
+    
+    // 停止画图
+    function stopDrawing() {
+      isDrawing = false;
+      // 结束绘画时保存状态
+      saveHistory();
+    }
+    
+    // 保存历史记录
+    function saveHistory() {
+      const currentState = drawingCanvas.toDataURL();
+      // 只保存与上一个状态不同的状态
+      if (history.length === 0 || history[history.length - 1] !== currentState) {
+        history.push(currentState);
+        // 限制历史记录长度
+        if (history.length > 20) {
+          history.shift();
+        }
+      }
+    }
+    
+    // 从画图生成拼豆图纸
+    function generatePatternFromDrawing() {
+      const cellSize = 20;
+      const pattern = [];
+      
+      for (let y = 0; y < canvasSize; y++) {
+        const row = [];
+        for (let x = 0; x < canvasSize; x++) {
+          // 获取像素颜色
+          const pixel = drawingContext.getImageData(x * cellSize, y * cellSize, 1, 1).data;
+          const r = pixel[0];
+          const g = pixel[1];
+          const b = pixel[2];
+          
+          // 转换为十六进制颜色
+          const hexColor = rgbToHex(r, g, b);
+          
+          // 找到最接近的拼豆颜色
+          let closestBead = beadColors[0];
+          let minDistance = Infinity;
+          
+          beadColors.forEach(bead => {
+            const distance = colorDistance(hexColor, bead.color);
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestBead = bead;
+            }
+          });
+          
+          row.push({
+            code: closestBead.code,
+            color: closestBead.color
+          });
+        }
+        pattern.push(row);
+      }
+      
+      return pattern;
+    }
+    
+    // 计算使用的拼豆
+    function calculateUsedBeads(pattern) {
+      usedBeads = {};
+      
+      pattern.forEach(row => {
+        row.forEach(bead => {
+          if (!usedBeads[bead.code]) {
+            usedBeads[bead.code] = 0;
+          }
+          usedBeads[bead.code]++;
+        });
+      });
+      
+      renderUsedBeads(usedBeads);
+    }
+    
+    // RGB转十六进制
+    function rgbToHex(r, g, b) {
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+    
+    // 颜色距离计算
+    function colorDistance(hex1, hex2) {
+      const rgb1 = hexToRgb(hex1);
+      const rgb2 = hexToRgb(hex2);
+      return Math.sqrt(
+        Math.pow(rgb1.r - rgb2.r, 2) +
+        Math.pow(rgb1.g - rgb2.g, 2) +
+        Math.pow(rgb1.b - rgb2.b, 2)
+      );
+    }
+    
+    // 十六进制转RGB
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 0, g: 0, b: 0 };
+    }
 
     // 初始化库存
     function initializeInventory() {
@@ -934,6 +1416,27 @@
         });
       });
 
+      // 上传/画图标签切换
+      uploadTab.addEventListener('click', function() {
+        uploadTab.classList.add('bg-primary', 'text-pixel-bg');
+        uploadTab.classList.remove('bg-pixel-panel', 'text-pixel-border');
+        drawTab.classList.add('bg-pixel-panel', 'text-pixel-border');
+        drawTab.classList.remove('bg-primary', 'text-pixel-bg');
+        uploadSection.classList.remove('hidden');
+        drawSection.classList.add('hidden');
+        currentImage = null; // 清除当前图片
+      });
+      
+      drawTab.addEventListener('click', function() {
+        drawTab.classList.add('bg-primary', 'text-pixel-bg');
+        drawTab.classList.remove('bg-pixel-panel', 'text-pixel-border');
+        uploadTab.classList.add('bg-pixel-panel', 'text-pixel-border');
+        uploadTab.classList.remove('bg-primary', 'text-pixel-bg');
+        uploadSection.classList.add('hidden');
+        drawSection.classList.remove('hidden');
+        currentImage = null; // 清除当前图片
+      });
+
       // 图片上传
       imageUpload.addEventListener('change', function(e) {
         if (e.target.files && e.target.files[0]) {
@@ -953,15 +1456,73 @@
         gridSizeValue.textContent = `${size}x${size}`;
       });
 
+      // 画图画布大小调整
+      drawCanvasSize.addEventListener('input', function() {
+        canvasSize = parseInt(this.value);
+        drawCanvasSizeValue.textContent = `${canvasSize}x${canvasSize}`;
+        createDrawingCanvas();
+      });
+      
+      // 画笔大小调整
+      brushSizeInput.addEventListener('input', function() {
+        brushSize = parseInt(this.value);
+        brushSizeValue.textContent = `${brushSize}x${brushSize}`;
+      });
+      
+      // 工具切换
+      drawBrush.addEventListener('click', function() {
+        currentTool = 'brush';
+        drawBrush.classList.add('bg-primary', 'text-pixel-bg');
+        drawBrush.classList.remove('bg-pixel-panel', 'text-pixel-border');
+        drawEraser.classList.add('bg-pixel-panel', 'text-pixel-border');
+        drawEraser.classList.remove('bg-primary', 'text-pixel-bg');
+      });
+      
+      drawEraser.addEventListener('click', function() {
+        currentTool = 'eraser';
+        drawEraser.classList.add('bg-primary', 'text-pixel-bg');
+        drawEraser.classList.remove('bg-pixel-panel', 'text-pixel-border');
+        drawBrush.classList.add('bg-pixel-panel', 'text-pixel-border');
+        drawBrush.classList.remove('bg-primary', 'text-pixel-bg');
+      });
+      
+      // 撤销功能
+      drawUndo.addEventListener('click', function() {
+        if (history.length > 1) {
+          history.pop(); // 移除当前状态
+          const lastState = history[history.length - 1];
+          const img = new Image();
+          img.onload = function() {
+            drawingContext.clearRect(0, 0, drawingCanvas.width, drawingCanvas.height);
+            drawingContext.drawImage(img, 0, 0);
+          };
+          img.src = lastState;
+        }
+      });
+      
+      // 清空画布
+      drawClear.addEventListener('click', function() {
+        drawGrid();
+        saveHistory();
+      });
+
       // 生成拼豆图纸
       generateBeadPattern.addEventListener('click', function() {
-        if (!currentImage) {
-          showNotification('请先上传图片', 'exclamation-circle', 'red-500');
+        // 检查是上传图片还是画图
+        if (uploadSection.classList.contains('hidden')) {
+          // 从画图生成
+          currentPattern = generatePatternFromDrawing();
+          renderBeadPattern(currentPattern);
+          calculateUsedBeads(currentPattern);
+          showNotification('拼豆图纸生成成功', 'check-circle', 'green-500');
+        } else if (currentImage) {
+          // 从上传图片生成
+          const size = parseInt(gridSize.value);
+          generatePattern(currentImage, size);
+        } else {
+          showNotification('请先上传图片或在画图模式下绘制图案', 'exclamation-circle', 'red-500');
           return;
         }
-        
-        const size = parseInt(gridSize.value);
-        generatePattern(currentImage, size);
       });
 
       // 扣除库存
@@ -994,12 +1555,13 @@
         }
         
         // 创建canvas用于绘制拼豆图纸
-        const size = currentPattern.length;
+        const height = currentPattern.length;
+        const width = currentPattern[0] ? currentPattern[0].length : 0;
         const beadSize = 60; // 每个拼豆60px，提高分辨率
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = size * beadSize;
-        canvas.height = size * beadSize;
+        canvas.width = width * beadSize;
+        canvas.height = height * beadSize;
         
         // 绘制拼豆图纸
         currentPattern.forEach((row, y) => {
@@ -1082,6 +1644,15 @@
             }
           }
         }, 'image/jpeg', 0.9);
+      });
+      
+      // 清空预览
+      document.getElementById('clear-preview').addEventListener('click', function() {
+        currentPattern = null;
+        usedBeads = {};
+        beadPatternPreview.innerHTML = '<p class="text-pixel-border text-center py-10 text-sm">生成图纸后将显示预览</p>';
+        usedBeadsContainer.innerHTML = '<p class="text-pixel-border p-4 text-sm">生成图纸后将显示使用的色号</p>';
+        showNotification('预览已清空', 'check-circle', 'green-500');
       });
 
       // 库存搜索
@@ -1255,38 +1826,44 @@
 
     // 生成拼豆图纸
     function generatePattern(image, size) {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      // 确保画布是正方形
-      canvas.width = size;
-      canvas.height = size;
-      
       const img = new Image();
       img.onload = function() {
-        // 计算图片的缩放比例，确保图片完全填充正方形画布
-        const scale = Math.max(size / img.width, size / img.height);
-        const scaledWidth = img.width * scale;
-        const scaledHeight = img.height * scale;
-        const offsetX = (size - scaledWidth) / 2;
-        const offsetY = (size - scaledHeight) / 2;
+        // 保持原始图像的宽高比
+        const aspectRatio = img.width / img.height;
+        let canvasWidth, canvasHeight;
         
-        // 绘制并缩放图片，确保填满正方形画布
+        if (aspectRatio >= 1) {
+          // 横向图片
+          canvasWidth = size;
+          canvasHeight = Math.round(size / aspectRatio);
+        } else {
+          // 纵向图片
+          canvasWidth = Math.round(size * aspectRatio);
+          canvasHeight = size;
+        }
+        
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        
+        // 绘制并缩放图片，保持原始比例
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, size, size);
-        ctx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
         
         // 获取像素数据
-        const imageData = ctx.getImageData(0, 0, size, size);
+        const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
         const data = imageData.data;
         
         // 生成拼豆图案
         const pattern = [];
         usedBeads = {};
         
-        for (let y = 0; y < size; y++) {
+        for (let y = 0; y < canvasHeight; y++) {
           const row = [];
-          for (let x = 0; x < size; x++) {
-            const index = (y * size + x) * 4;
+          for (let x = 0; x < canvasWidth; x++) {
+            const index = (y * canvasWidth + x) * 4;
             const r = data[index];
             const g = data[index + 1];
             const b = data[index + 2];
@@ -1346,7 +1923,8 @@
 
     // 渲染拼豆图纸
     function renderBeadPattern(pattern) {
-      const size = pattern.length;
+      const height = pattern.length;
+      const width = pattern[0] ? pattern[0].length : 0;
       const container = document.createElement('div');
       container.className = 'relative';
       let scale = 1;
@@ -1356,13 +1934,14 @@
       // 创建带网格线和色号的图纸
       const grid = document.createElement('div');
       grid.className = 'bead-grid cursor-pointer';
-      grid.style.gridTemplateColumns = `repeat(${size}, 30px)`;
-      grid.style.width = `${size * 30}px`;
-      grid.style.height = `${size * 30}px`;
+      grid.style.gridTemplateColumns = `repeat(${width}, 30px)`;
+      grid.style.width = `${width * 30}px`;
+      grid.style.height = `${height * 30}px`;
       grid.style.margin = '0 auto';
       grid.style.border = '2px solid #333';
       grid.style.position = 'relative';
       grid.style.transition = 'transform 0.2s ease';
+      grid.style.transformOrigin = 'center center';
       
       // 添加点击事件，触发全屏预览
       grid.addEventListener('click', function() {
@@ -1399,10 +1978,6 @@
         if (scale < maxScale) {
           scale += 0.1;
           grid.style.transform = `scale(${scale})`;
-          grid.style.transformOrigin = 'center center';
-          // 调整容器大小以适应缩放后的内容
-          container.style.width = `${size * 30 * scale}px`;
-          container.style.height = `${size * 30 * scale}px`;
         }
       });
       
@@ -1410,49 +1985,49 @@
         if (scale > minScale) {
           scale -= 0.1;
           grid.style.transform = `scale(${scale})`;
-          grid.style.transformOrigin = 'center center';
-          // 调整容器大小以适应缩放后的内容
-          container.style.width = `${size * 30 * scale}px`;
-          container.style.height = `${size * 30 * scale}px`;
         }
       });
     }
 
     // 显示全屏预览
     function showFullScreenPreview(pattern) {
-      const size = pattern.length;
+      const height = pattern.length;
+      const width = pattern[0] ? pattern[0].length : 0;
       const fullscreenContent = document.getElementById('fullscreen-content');
       let scale = 1;
       const minScale = 0.5;
       const maxScale = 3;
       
+      // 计算屏幕可用空间
+      const availableWidth = window.innerWidth * 0.9;
+      const availableHeight = window.innerHeight * 0.9;
+      
+      // 计算合适的单元格大小，确保图纸能完整显示
+      const cellSize = Math.min(
+        Math.floor(availableWidth / width),
+        Math.floor(availableHeight / height),
+        40 // 最大单元格大小
+      );
+      
       // 创建放大的图纸
       const grid = document.createElement('div');
       grid.className = 'bead-grid';
-      grid.style.gridTemplateColumns = `repeat(${size}, 40px)`;
-      grid.style.width = `${size * 40}px`;
-      grid.style.height = `${size * 40}px`;
+      grid.style.gridTemplateColumns = `repeat(${width}, ${cellSize}px)`;
+      grid.style.width = `${width * cellSize}px`;
+      grid.style.height = `${height * cellSize}px`;
       grid.style.margin = '0 auto';
       grid.style.border = '4px solid #333';
       grid.style.transition = 'transform 0.2s ease';
+      grid.style.transformOrigin = 'center center';
       
       pattern.forEach((row, y) => {
         row.forEach((bead, x) => {
           const cell = document.createElement('div');
           cell.className = 'bead-cell';
           cell.style.backgroundColor = bead.color;
-          cell.style.width = '40px';
-          cell.style.height = '40px';
+          cell.style.width = `${cellSize}px`;
+          cell.style.height = `${cellSize}px`;
           cell.style.border = '1px solid rgba(0, 0, 0, 0.3)';
-          cell.style.display = 'flex';
-          cell.style.alignItems = 'center';
-          cell.style.justifyContent = 'center';
-          cell.style.fontSize = '12px';
-          cell.style.fontWeight = 'bold';
-          cell.style.color = '#fff';
-          cell.style.fontFamily = 'SimHei, sans-serif';
-          cell.style.textShadow = '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000';
-          cell.textContent = bead.code;
           grid.appendChild(cell);
         });
       });
@@ -1468,10 +2043,6 @@
         if (scale < maxScale) {
           scale += 0.1;
           grid.style.transform = `scale(${scale})`;
-          grid.style.transformOrigin = 'center center';
-          // 调整容器大小以适应缩放后的内容
-          fullscreenContent.style.width = `${size * 40 * scale}px`;
-          fullscreenContent.style.height = `${size * 40 * scale}px`;
         }
       });
       
@@ -1479,10 +2050,6 @@
         if (scale > minScale) {
           scale -= 0.1;
           grid.style.transform = `scale(${scale})`;
-          grid.style.transformOrigin = 'center center';
-          // 调整容器大小以适应缩放后的内容
-          fullscreenContent.style.width = `${size * 40 * scale}px`;
-          fullscreenContent.style.height = `${size * 40 * scale}px`;
         }
       });
     }
@@ -1707,5 +2274,21 @@
       }, 3000);
     }
   </script>
-</body>
+<!-- Footer -->
+  <footer class="py-8 px-6 border-t-4 border-pixel-border bg-secondary text-pixel-bg">
+    <div class="container mx-auto">
+      <div class="text-center">
+        <div class="text-sm mb-4 space-y-2">
+          <p>关于作者：</p>
+          <p class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <span>抖音 "天才阿恒" id: sinyi614-704</span>
+            <span>哔哩哔哩 "天才阿恒-" uid：498831875</span>
+            <span>小红书 "天才阿恒" id：61452068660</span>
+          </p>
+        </div>
+        <p class="text-sm font-medium">版权归作者所有，请勿商用，后果自负</p>
+      </div>
+    </div>
+  </footer>
+  </body>
 </html>
